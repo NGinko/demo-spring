@@ -3,7 +3,6 @@ package top.yuuna.springfamework.beans.factory.support;
 import top.yuuna.springfamework.beans.BeansException;
 import top.yuuna.springfamework.beans.factory.BeanFactory;
 import top.yuuna.springfamework.beans.factory.config.BeanDefinition;
-import top.yuuna.springfamework.beans.factory.config.DefaultSingletonBeanRegistry;
 
 /**
  * 抽象类定义模板方法

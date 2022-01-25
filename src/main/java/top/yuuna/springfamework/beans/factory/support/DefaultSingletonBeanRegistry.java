@@ -1,4 +1,6 @@
-package top.yuuna.springfamework.beans.factory.config;
+package top.yuuna.springfamework.beans.factory.support;
+
+import top.yuuna.springfamework.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
