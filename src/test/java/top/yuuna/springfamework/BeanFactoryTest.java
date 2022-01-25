@@ -1,8 +1,9 @@
 package top.yuuna.springfamework;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
+import top.yuuna.springfamework.beans.factory.config.BeanDefinition;
+import top.yuuna.springfamework.beans.factory.support.DefaultListableBeanFactory;
 import top.yuuna.springfamework.springframework.test.bean.LearningService;
 
 
@@ -10,17 +11,28 @@ public class BeanFactoryTest {
 
     @Test
     public void testBeanFactory() {
-        //1.define BeanFactory
-        BeanFactory beanFactory = new BeanFactory();
 
-        //2.init Bean define，and then register to bean factory
-        String beanName = "learningService";
-        BeanDefinition beanDefinition = new BeanDefinition(new LearningService());
-        beanFactory.registerBeanDefinition(beanName, beanDefinition);
+        /**
+         * 主要流程包括：初始化Bean工厂，注册Bean，获取Bean
+         */
+        //1.init BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        //2.create beanDefinition and register bean
+        String learningServiceBeanName = "userService";
+        BeanDefinition beanDefinition = new BeanDefinition(LearningService.class);
+        beanFactory.registerBeanDefinition(learningServiceBeanName, beanDefinition);
+        //3.first get bean
+        LearningService learningService = (LearningService) beanFactory.getBean(learningServiceBeanName);
+        System.out.println(learningService.learningRemind());
 
-        //3.get bean
-        LearningService learningService = (LearningService) beanFactory.getBean(beanName);
-        Assert.assertEquals("今天你学习了吗?",learningService.learningRemind());
+        //4.get singleton bean
+        LearningService single_learningService = (LearningService) beanFactory.getBean(learningServiceBeanName);
+        System.out.println(single_learningService.learningRemind());
+        //check two object value
+        Assert.assertEquals(single_learningService, learningService);
+
+
+
     }
 
 }
