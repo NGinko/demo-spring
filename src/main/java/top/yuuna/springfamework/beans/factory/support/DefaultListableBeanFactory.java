@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * listable adj.可列举的
  * 接口定义的注册、获取都被集中在DefaultListableBeanFactory中
  * @author NGinko
  * @date 2022-01-25 21:19
@@ -15,6 +16,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     private Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
+    public DefaultListableBeanFactory() {
+
+    }
+
+    public DefaultListableBeanFactory(String methodInstance) {
+        super(methodInstance);
+    }
 
     @Override
     protected BeanDefinition getBeanDefinition(String beanName) throws BeansException {

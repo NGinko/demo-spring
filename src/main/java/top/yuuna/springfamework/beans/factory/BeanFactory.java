@@ -22,5 +22,14 @@ public interface BeanFactory {
      */
     Object getBean(String name) throws BeansException;
 
+    /**
+     * 重载一个可以传递具体构造函数的getBean，可以通过传入构造函数来实例化了
+     * @param beanName
+     * @param args
+     * @return
+     * @throws BeansException
+     */
+    Object getBean(String beanName, Object... args) throws BeansException;
+
 }
 

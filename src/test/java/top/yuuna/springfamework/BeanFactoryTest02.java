@@ -7,7 +7,7 @@ import top.yuuna.springfamework.beans.factory.support.DefaultListableBeanFactory
 import top.yuuna.springfamework.springframework.test.bean.LearningService;
 
 
-public class BeanFactoryTest {
+public class BeanFactoryTest02 {
 
     @Test
     public void testBeanFactory() {

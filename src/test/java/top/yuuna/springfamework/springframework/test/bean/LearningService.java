@@ -6,8 +6,29 @@ package top.yuuna.springfamework.springframework.test.bean;
  */
 public class LearningService {
 
-    public String learningRemind() {
-        return "今天你学习了吗?";
+    private String className;
+
+    public LearningService(String className) {
+        this.className = className;
     }
 
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String learningRemind() {
+        return "今天你学习了吗?"+ className;
+    }
+
+
+    @Override
+    public String toString() {
+        return "LearningService{" +
+                "className='" + className + '\'' +
+                '}';
+    }
 }
