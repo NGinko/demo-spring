@@ -1,7 +1,11 @@
 package top.yuuna.springfamework.beans.factory.support;
 
+import cn.hutool.core.bean.BeanUtil;
 import top.yuuna.springfamework.beans.BeansException;
+import top.yuuna.springfamework.beans.PropertyValue;
+import top.yuuna.springfamework.beans.PropertyValues;
 import top.yuuna.springfamework.beans.factory.config.BeanDefinition;
+import top.yuuna.springfamework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
 
@@ -36,6 +40,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean = null;
         try {
             bean = createBeanInstance(beanDefinition, beanName, args);
+            //初始化之后需要给bean填充属性
+            applyPropertyValues(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
@@ -58,7 +64,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Constructor<?>[] declaredConstructors = beanClass.getDeclaredConstructors();
         for (Constructor ctor : declaredConstructors) {
             //TODO 先做简单的参数长度判断，后面还需要做类型比对
-            if (null != ctor && ctor.getParameterTypes().length == args.length) {
+            if (null != args && ctor.getParameterTypes().length == args.length) {
                 constructorToUse = ctor;
                 break;
             }
@@ -70,6 +76,27 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             instantiationStrategy = getSimpleInstantiationStrategy();
         }
         return instantiationStrategy.instantiation(beanDefinition, beanBeanName, constructorToUse, args);
+    }
+
+
+    protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        try {
+            PropertyValues propertyValues = beanDefinition.getPropertyValues();
+            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+                String name = propertyValue.getName();
+                Object value = propertyValue.getValue();
+
+                if (value instanceof BeanReference) {
+                    //如果A依赖的B依旧是BeanReference ，就需要递归的获取
+                    //todo 但是这样没有处理循环依赖的问题
+                    BeanReference beanReference = (BeanReference) value;
+                    value = getBean(beanReference.getBeanName());
+                }
+                BeanUtil.setFieldValue(bean, name, value);
+            }
+        } catch (Exception e) {
+            throw new BeansException("Error setting property values：" + beanName);
+        }
     }
 
     public InstantiationStrategy getSimpleInstantiationStrategy() {
